@@ -14,18 +14,22 @@ private:
   static void ARDUINO_ISR_ATTR TimerIsr();
   static MoreTimers* _timer[20];
   static int _timerNo;
-  unsigned long _time;
+  
   volatile bool check;
-  volatile uint16_t _counter;
-  bool _autoreload;
+  volatile uint32_t _counter;
+  volatile bool _autoreload;
   TimerHandler _timerCb = NULL;
   void* _timerCb_arg = NULL;
+  static volatile bool _triggered;
+  volatile bool _async;
 public:
+  void run();
+  uint64_t _time;
   MoreTimers();
-  void begin(unsigned long timeInHundredMilliSeconds);
-  void alarmEnable(bool Autoreload = true);
+  void begin(uint64_t timeInMilliSeconds);
+  void alarmEnable(bool Autoreload = true,bool Async = false);
   void alarmDisable();
-  void onTimer(TimerHandler callbackFunc, void* arg);
+  void onTimer(TimerHandler callbackFunc, void* arg = NULL);
 };
 
 
